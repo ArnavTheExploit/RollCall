@@ -10,6 +10,10 @@ import {
   getOngoingClasses,
   getUpcomingClasses,
   getClassesForStudent,
+  getStudentAttendanceStats,
+  getRecentAttendanceForStudent,
+  getAttendanceForStudent,
+  mockAttendanceRecords,
 } from "@/data/mockData";
 import { format, parseISO } from "date-fns";
 import { QRCodeSVG } from "qrcode.react";
@@ -25,6 +29,8 @@ export default function StudentDashboardPage() {
   const [showAttendanceModal, setShowAttendanceModal] = useState(false);
   const [scannedClass, setScannedClass] = useState<any>(null);
   const [attendanceList, setAttendanceList] = useState<any[]>([]);
+  const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
+  const [selectedDateFilter, setSelectedDateFilter] = useState<string>("all");
 
   useEffect(() => {
     // Get student ID from localStorage
@@ -52,8 +58,22 @@ export default function StudentDashboardPage() {
   }
 
   const attendanceData = getAttendancePercentageBySubject(student.id);
+  const attendanceStats = getStudentAttendanceStats(student.id);
+  const recentAttendance = getRecentAttendanceForStudent(student.id, 10);
+  const allAttendance = getAttendanceForStudent(student.id);
   const ongoingClasses = getOngoingClasses().filter((cls) => cls.studentIds.includes(student.id));
   const upcomingClasses = getUpcomingClasses().filter((cls) => cls.studentIds.includes(student.id));
+  
+  // Get unique subjects for filter
+  const uniqueSubjects = Array.from(new Set(allAttendance.map((r) => r.subject))).sort();
+  const uniqueDates = Array.from(new Set(allAttendance.map((r) => r.date))).sort().reverse();
+  
+  // Filter attendance based on selected filters
+  const filteredAttendance = allAttendance.filter((record) => {
+    const subjectMatch = selectedSubjectFilter === "all" || record.subject === selectedSubjectFilter;
+    const dateMatch = selectedDateFilter === "all" || record.date === selectedDateFilter;
+    return subjectMatch && dateMatch;
+  });
 
   const handleClassClick = (classItem: any) => {
     // Check if class is active
@@ -162,6 +182,65 @@ export default function StudentDashboardPage() {
           <p className="mt-2 text-gray-600">Welcome back, {student.name}!</p>
         </div>
 
+        {/* Overall Attendance Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Overall Attendance</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{attendanceStats.overallPercentage}%</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-full">
+                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Present</p>
+                <p className="text-3xl font-bold text-green-600 mt-2">{attendanceStats.present}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-full">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Absent</p>
+                <p className="text-3xl font-bold text-red-600 mt-2">{attendanceStats.absent}</p>
+              </div>
+              <div className="p-3 bg-red-100 rounded-full">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Late</p>
+                <p className="text-3xl font-bold text-yellow-600 mt-2">{attendanceStats.late}</p>
+              </div>
+              <div className="p-3 bg-yellow-100 rounded-full">
+                <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Attendance Percentage by Subject */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Attendance Percentage by Subject</h2>
@@ -196,6 +275,194 @@ export default function StudentDashboardPage() {
             <p className="text-gray-500 text-center py-8">No attendance records yet.</p>
           )}
         </div>
+
+        {/* Detailed Attendance History */}
+        {allAttendance.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Attendance History</h2>
+            
+            {/* Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Subject</label>
+                <select
+                  value={selectedSubjectFilter}
+                  onChange={(e) => setSelectedSubjectFilter(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="all">All Subjects</option>
+                  {uniqueSubjects.map((subject) => (
+                    <option key={subject} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Date</label>
+                <select
+                  value={selectedDateFilter}
+                  onChange={(e) => setSelectedDateFilter(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="all">All Dates</option>
+                  {uniqueDates.map((date) => (
+                    <option key={date} value={date}>
+                      {format(parseISO(date + "T00:00:00"), "MMM dd, yyyy")}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Attendance Table */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Subject
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Time
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Teacher
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Reason
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredAttendance.length > 0 ? (
+                    filteredAttendance
+                      .sort((a, b) => {
+                        const dateA = new Date(`${a.date}T${a.time}`);
+                        const dateB = new Date(`${b.date}T${b.time}`);
+                        return dateB.getTime() - dateA.getTime();
+                      })
+                      .map((record) => (
+                        <tr key={record.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {format(parseISO(record.date + "T00:00:00"), "MMM dd, yyyy")}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {record.subject}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{record.time}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                record.status === "present"
+                                  ? "bg-green-100 text-green-800"
+                                  : record.status === "late"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
+                            >
+                              {record.status.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{record.teacherName}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {record.reason || "-"}
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-8 text-center text-sm text-gray-500">
+                        No attendance records found for the selected filters.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Statistics Summary */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{filteredAttendance.length}</p>
+                  <p className="text-xs text-gray-600 mt-1">Total Records</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-green-600">
+                    {filteredAttendance.filter((r) => r.status === "present").length}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">Present</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-red-600">
+                    {filteredAttendance.filter((r) => r.status === "absent").length}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">Absent</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {filteredAttendance.filter((r) => r.status === "late").length}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">Late</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Recent Attendance */}
+        {recentAttendance.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Attendance</h2>
+            <div className="space-y-3">
+              {recentAttendance.slice(0, 5).map((record) => (
+                <div
+                  key={record.id}
+                  className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div
+                      className={`w-3 h-3 rounded-full ${
+                        record.status === "present"
+                          ? "bg-green-500"
+                          : record.status === "late"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                      }`}
+                    ></div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{record.subject}</p>
+                      <p className="text-xs text-gray-500">
+                        {format(parseISO(record.date + "T00:00:00"), "MMM dd, yyyy")} at {record.time}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span
+                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                        record.status === "present"
+                          ? "bg-green-100 text-green-800"
+                          : record.status === "late"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {record.status.toUpperCase()}
+                    </span>
+                    <span className="text-xs text-gray-500">{record.teacherName}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Ongoing Classes */}
         {ongoingClasses.length > 0 && (

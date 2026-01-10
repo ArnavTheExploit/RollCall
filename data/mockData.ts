@@ -496,6 +496,74 @@ export function getAttendanceDatesForSubject(subject: string): string[] {
   return dates;
 }
 
+// Helper function to get attendance records for a specific student
+export function getAttendanceForStudent(studentId: string): AttendanceRecord[] {
+  return mockAttendanceRecords.filter((record) => record.studentId === studentId);
+}
+
+// Helper function to get attendance records for a student by subject
+export function getStudentAttendanceBySubject(studentId: string, subject: string): AttendanceRecord[] {
+  return mockAttendanceRecords.filter((record) => record.studentId === studentId && record.subject === subject);
+}
+
+// Helper function to get recent attendance records for a student
+export function getRecentAttendanceForStudent(studentId: string, limit: number = 10): AttendanceRecord[] {
+  const records = getAttendanceForStudent(studentId);
+  return records
+    .sort((a, b) => {
+      const dateA = new Date(`${a.date}T${a.time}`);
+      const dateB = new Date(`${b.date}T${b.time}`);
+      return dateB.getTime() - dateA.getTime();
+    })
+    .slice(0, limit);
+}
+
+// Helper function to get attendance statistics for a student
+export function getStudentAttendanceStats(studentId: string): {
+  total: number;
+  present: number;
+  absent: number;
+  late: number;
+  overallPercentage: number;
+  bySubject: { subject: string; total: number; present: number; percentage: number }[];
+} {
+  const records = getAttendanceForStudent(studentId);
+  const total = records.length;
+  const present = records.filter((r) => r.status === "present").length;
+  const absent = records.filter((r) => r.status === "absent").length;
+  const late = records.filter((r) => r.status === "late").length;
+  const overallPercentage = total > 0 ? Math.round(((present + late) / total) * 100) : 0;
+
+  // Group by subject
+  const subjectMap = new Map<string, { total: number; present: number }>();
+  records.forEach((record) => {
+    if (!subjectMap.has(record.subject)) {
+      subjectMap.set(record.subject, { total: 0, present: 0 });
+    }
+    const stats = subjectMap.get(record.subject)!;
+    stats.total++;
+    if (record.status === "present" || record.status === "late") {
+      stats.present++;
+    }
+  });
+
+  const bySubject = Array.from(subjectMap.entries()).map(([subject, stats]) => ({
+    subject,
+    total: stats.total,
+    present: stats.present,
+    percentage: stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0,
+  }));
+
+  return {
+    total,
+    present,
+    absent,
+    late,
+    overallPercentage,
+    bySubject,
+  };
+}
+
 // Attendance reasons
 export const ATTENDANCE_REASONS = [
   "Health Issue",
