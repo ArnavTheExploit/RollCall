@@ -260,12 +260,12 @@ export const mockClasses: Class[] = [
     semester: 3,
     date: formatDate(today),
     startTime: "19:00",
-    endTime: "20:30",
-    duration: 90,
+    endTime: "22:00", // Extended to ensure visibility
+    duration: 180,
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C12-${formatDate(today)}-19:00`,
     createdAt: createDateWithTime(today, 18, 50).toISOString(),
-    expiresAt: getEndTime(today, "19:00", 90).toISOString(),
+    expiresAt: getEndTime(today, "19:00", 180).toISOString(),
     isActive: true,
   },
   // Active class today - Web Development (evening)
@@ -279,12 +279,12 @@ export const mockClasses: Class[] = [
     semester: 3,
     date: formatDate(today),
     startTime: "19:15",
-    endTime: "20:45",
-    duration: 90,
+    endTime: "22:15", // Extended
+    duration: 180,
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C13-${formatDate(today)}-19:15`,
     createdAt: createDateWithTime(today, 19, 5).toISOString(),
-    expiresAt: getEndTime(today, "19:15", 90).toISOString(),
+    expiresAt: getEndTime(today, "19:15", 180).toISOString(),
     isActive: true,
   },
   // Active class today - Cyber Security (evening)
@@ -298,12 +298,12 @@ export const mockClasses: Class[] = [
     semester: 3,
     date: formatDate(today),
     startTime: "19:30",
-    endTime: "21:00",
-    duration: 90,
+    endTime: "22:30", // Extended
+    duration: 180,
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C14-${formatDate(today)}-19:30`,
     createdAt: createDateWithTime(today, 19, 20).toISOString(),
-    expiresAt: getEndTime(today, "19:30", 90).toISOString(),
+    expiresAt: getEndTime(today, "19:30", 180).toISOString(),
     isActive: true,
   },
   // Active class today - Ethical Hacking (evening)
@@ -317,12 +317,12 @@ export const mockClasses: Class[] = [
     semester: 3,
     date: formatDate(today),
     startTime: "19:45",
-    endTime: "21:15",
-    duration: 90,
+    endTime: "23:00", // Extended
+    duration: 195,
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C15-${formatDate(today)}-19:45`,
     createdAt: createDateWithTime(today, 19, 35).toISOString(),
-    expiresAt: getEndTime(today, "19:45", 90).toISOString(),
+    expiresAt: getEndTime(today, "19:45", 195).toISOString(),
     isActive: true,
   },
   // Upcoming class today - Database Management Systems (afternoon)
