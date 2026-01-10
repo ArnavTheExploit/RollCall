@@ -592,18 +592,9 @@ export default function StudentDashboardPage() {
 // QR Modal Component - Displays QR Code for Teacher to Scan
 // QR Modal Component - Displays QR Code for Teacher to Scan
 function QRModal({ classItem, studentId, onScan, onClose }: { classItem: any; studentId: string; onScan: (qrCode: string) => void; onClose: () => void }) {
-  // Generate personalized QR Code Value
-  // Format: "ATTENDANCE:ClassID:StudentID:Date:Time"
-  const timestamp = new Date().toISOString();
-  // Using a simpler string format that's easy to scan/parse or just a JSON string
-  const qrValue = JSON.stringify({
-    type: "student_attendance",
-    classId: classItem.id,
-    studentId: studentId,
-    timestamp: timestamp,
-    // Add validUntil to ensure it's related to the class session
-    validUntil: classItem.expiresAt
-  });
+  // Generate personalized QR Code URL that opens the attendance marking page
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+  const qrValue = `${origin}/attendance/mark?classId=${classItem.id}&studentId=${studentId}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
