@@ -186,7 +186,7 @@ export const mockClasses: Class[] = [
     startTime: "00:00",
     endTime: "23:59", // Display text only, logic uses duration
     duration: 2880, // 48 hours
-    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    studentIds: ["1"],
     qrCode: `CLASS-CDEMO-${formatDate(today)}-00:00`,
     createdAt: createDateWithTime(yesterday, 0, 0).toISOString(),
     expiresAt: getEndTime(yesterday, "00:00", 2880).toISOString(),
@@ -281,7 +281,7 @@ export const mockClasses: Class[] = [
     startTime: "19:00",
     endTime: "22:00", // Extended to ensure visibility
     duration: 180,
-    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    studentIds: ["2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C12-${formatDate(today)}-19:00`,
     createdAt: createDateWithTime(today, 18, 50).toISOString(),
     expiresAt: getEndTime(today, "19:00", 180).toISOString(),
@@ -300,7 +300,7 @@ export const mockClasses: Class[] = [
     startTime: "19:15",
     endTime: "22:15", // Extended
     duration: 180,
-    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    studentIds: ["2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C13-${formatDate(today)}-19:15`,
     createdAt: createDateWithTime(today, 19, 5).toISOString(),
     expiresAt: getEndTime(today, "19:15", 180).toISOString(),
@@ -319,7 +319,7 @@ export const mockClasses: Class[] = [
     startTime: "19:30",
     endTime: "22:30", // Extended
     duration: 180,
-    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    studentIds: ["2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C14-${formatDate(today)}-19:30`,
     createdAt: createDateWithTime(today, 19, 20).toISOString(),
     expiresAt: getEndTime(today, "19:30", 180).toISOString(),
@@ -338,7 +338,7 @@ export const mockClasses: Class[] = [
     startTime: "19:45",
     endTime: "23:00", // Extended
     duration: 195,
-    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    studentIds: ["2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C15-${formatDate(today)}-19:45`,
     createdAt: createDateWithTime(today, 19, 35).toISOString(),
     expiresAt: getEndTime(today, "19:45", 195).toISOString(),
