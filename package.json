@@ -1,26 +1,30 @@
 {
-  "name": "roll-call",
+  "name": "rollcall",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
-    "next": "16.1.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "next": "14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "qrcode.react": "^3.1.0",
+    "html5-qrcode": "^2.3.8",
+    "date-fns": "^3.6.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@types/node": "^20.14.11",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.3"
   }
 }
+
