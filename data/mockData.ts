@@ -173,6 +173,25 @@ const getEndTime = (date: Date, startTime: string, duration: number) => {
 
 // Create mock classes with active and expired sessions
 export const mockClasses: Class[] = [
+  // Demo Ongoing Class (All Day)
+  {
+    id: "C_DEMO",
+    name: "Project Management",
+    subject: "Project Management",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(yesterday),
+    startTime: "00:00",
+    endTime: "23:59", // Display text only, logic uses duration
+    duration: 2880, // 48 hours
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-CDEMO-${formatDate(today)}-00:00`,
+    createdAt: createDateWithTime(yesterday, 0, 0).toISOString(),
+    expiresAt: getEndTime(yesterday, "00:00", 2880).toISOString(),
+    isActive: true,
+  },
   // Ongoing class today - Data Structures and Algorithms (morning)
   {
     id: "C1",
@@ -920,21 +939,13 @@ export function getClassesForStudent(studentId: string): Class[] {
 export function getOngoingClasses(): Class[] {
   const now = new Date();
   return mockClasses.filter((cls) => {
+    // Must be active
+    if (!cls.isActive) return false;
+
     // Check if class is currently happening based on time
-    const classDate = new Date(cls.date + "T00:00:00");
-    const todayDate = new Date(formatDate(now) + "T00:00:00");
-
-    // Only check classes for today or future dates
-    if (classDate.getTime() < todayDate.getTime()) return false;
-
-    // For today's classes, check if current time is between start and end
-    if (formatDate(classDate) === formatDate(now)) {
-      const startTime = new Date(cls.date + "T" + cls.startTime);
-      const endTime = new Date(cls.expiresAt);
-      return now >= startTime && now <= endTime;
-    }
-
-    return false;
+    const startTime = new Date(cls.date + "T" + cls.startTime);
+    const endTime = new Date(cls.expiresAt);
+    return now >= startTime && now <= endTime;
   });
 }
 
