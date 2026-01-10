@@ -182,14 +182,14 @@ export const mockClasses: Class[] = [
     teacherName: "Dr. Anjali Mehta",
     course: "Computer Science",
     semester: 3,
-    date: formatDate(yesterday),
-    startTime: "00:00",
-    endTime: "23:59", // Display text only, logic uses duration
-    duration: 2880, // 48 hours
+    date: formatDate(today),
+    startTime: "09:00",
+    endTime: "10:30",
+    duration: 90, // 1.5 hours
     studentIds: ["1"],
-    qrCode: `CLASS-CDEMO-${formatDate(today)}-00:00`,
-    createdAt: createDateWithTime(yesterday, 0, 0).toISOString(),
-    expiresAt: getEndTime(yesterday, "00:00", 2880).toISOString(),
+    qrCode: `CLASS-CDEMO-${formatDate(today)}-09:00`,
+    createdAt: createDateWithTime(today, 8, 50).toISOString(),
+    expiresAt: getEndTime(today, "09:00", 90).toISOString(),
     isActive: true,
   },
   // Ongoing class today - Data Structures and Algorithms (morning)

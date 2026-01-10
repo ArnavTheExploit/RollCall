@@ -634,9 +634,6 @@ function QRModal({ classItem, studentId, onScan, onClose }: { classItem: any; st
             <p className="text-sm text-gray-500">
               {classItem.startTime} - {classItem.endTime}
             </p>
-            <p className="text-xs text-blue-600 font-medium bg-blue-50 px-3 py-1 rounded-full inline-block mt-2">
-              Present this QR to your teacher
-            </p>
           </div>
         </div>
 
