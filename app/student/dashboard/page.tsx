@@ -257,10 +257,10 @@ export default function StudentDashboardPage() {
                   <div className="w-full bg-gray-200 rounded-full h-6">
                     <div
                       className={`h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white ${item.percentage >= 75
-                          ? "bg-green-500"
-                          : item.percentage >= 50
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
+                        ? "bg-green-500"
+                        : item.percentage >= 50
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
                         }`}
                       style={{ width: `${item.percentage}%` }}
                     >
@@ -359,10 +359,10 @@ export default function StudentDashboardPage() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
                               className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${record.status === "present"
-                                  ? "bg-green-100 text-green-800"
-                                  : record.status === "late"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-red-100 text-red-800"
+                                ? "bg-green-100 text-green-800"
+                                : record.status === "late"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
                                 }`}
                             >
                               {record.status.toUpperCase()}
@@ -428,10 +428,10 @@ export default function StudentDashboardPage() {
                   <div className="flex items-center space-x-4">
                     <div
                       className={`w-3 h-3 rounded-full ${record.status === "present"
-                          ? "bg-green-500"
-                          : record.status === "late"
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
+                        ? "bg-green-500"
+                        : record.status === "late"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
                         }`}
                     ></div>
                     <div>
@@ -444,10 +444,10 @@ export default function StudentDashboardPage() {
                   <div className="flex items-center space-x-3">
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${record.status === "present"
-                          ? "bg-green-100 text-green-800"
-                          : record.status === "late"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
+                        ? "bg-green-100 text-green-800"
+                        : record.status === "late"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
                         }`}
                     >
                       {record.status.toUpperCase()}
@@ -480,15 +480,15 @@ export default function StudentDashboardPage() {
                       Ongoing
                     </span>
                   </div>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div className="flex items-center">
-                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {classItem.startTime} - {classItem.endTime}
-                      </div>
-                      <p className="text-xs text-gray-500 mt-2">Tap to view QR code</p>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {classItem.startTime} - {classItem.endTime}
                     </div>
+                    <p className="text-xs text-gray-500 mt-2">Tap to view QR code</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -545,6 +545,7 @@ export default function StudentDashboardPage() {
       {showQRModal && selectedClass && (
         <QRModal
           classItem={selectedClass}
+          studentId={studentId || ""}
           onScan={handleQRScan}
           onClose={() => {
             setShowQRModal(false);
@@ -572,9 +573,13 @@ export default function StudentDashboardPage() {
 }
 
 // QR Modal Component
-function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCode: string) => void; onClose: () => void }) {
+function QRModal({ classItem, studentId, onScan, onClose }: { classItem: any; studentId: string; onScan: (qrCode: string) => void; onClose: () => void }) {
   const [scanning, setScanning] = useState(true);
   const scannerRef = useRef<any>(null);
+
+  // Generate personalized QR Code URL
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const qrValues = `${origin}/attendance/mark?classId=${classItem.id}&studentId=${studentId}`;
 
   useEffect(() => {
     if (typeof window === "undefined" || !scanning) return;
@@ -656,12 +661,12 @@ function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCo
 
         {/* QR Code Display */}
         <div className="flex flex-col items-center mb-6">
-          <p className="text-sm font-medium text-gray-700 mb-4">Attendance QR Code</p>
+          <p className="text-sm font-medium text-gray-700 mb-4">Scan to Mark Attendance</p>
           <div className="bg-white p-4 border-2 border-gray-300 rounded-lg shadow-sm">
-            <QRCodeSVG value={classItem.qrCode} size={250} className="border border-gray-200 rounded" />
+            <QRCodeSVG value={qrValues} size={250} className="border border-gray-200 rounded" />
           </div>
-          <p className="text-xs text-gray-500 font-mono mt-3 break-all text-center max-w-sm">
-            {classItem.qrCode}
+          <p className="text-xs text-gray-400 font-mono mt-3 text-center max-w-sm">
+            Scan with your mobile camera
           </p>
         </div>
 
@@ -761,8 +766,8 @@ function AttendanceListModal({
                         <button
                           onClick={() => onMarkAttendance(student.id, "present")}
                           className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${student.status === "present"
-                              ? "bg-green-600 text-white"
-                              : "bg-green-100 text-green-700 hover:bg-green-200"
+                            ? "bg-green-600 text-white"
+                            : "bg-green-100 text-green-700 hover:bg-green-200"
                             }`}
                         >
                           Present
@@ -770,8 +775,8 @@ function AttendanceListModal({
                         <button
                           onClick={() => onMarkAttendance(student.id, "absent")}
                           className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${student.status === "absent"
-                              ? "bg-red-600 text-white"
-                              : "bg-red-100 text-red-700 hover:bg-red-200"
+                            ? "bg-red-600 text-white"
+                            : "bg-red-100 text-red-700 hover:bg-red-200"
                             }`}
                         >
                           Absent
