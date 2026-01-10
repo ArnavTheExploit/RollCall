@@ -92,7 +92,7 @@ export default function TeacherLoginPage() {
 
           <div className="text-sm text-center">
             <p className="text-gray-600">
-              Demo: Use any teacher email (e.g., sarah.williams@university.edu) and any password
+              Demo: Use any teacher email (e.g., anjali.mehta@university.edu) and any password
             </p>
           </div>
 
