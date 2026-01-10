@@ -241,34 +241,51 @@ export default function StudentDashboardPage() {
           </div>
         </div>
 
-        {/* Attendance Percentage by Subject */}
+        {/* Attendance Percentage by Subject - Vertical Bar Graph */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Attendance Percentage by Subject</h2>
           {attendanceData.length > 0 ? (
-            <div className="space-y-6">
-              {attendanceData.map((item) => (
-                <div key={item.subject}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-gray-700">{item.subject}</span>
-                    <span className="text-sm font-bold text-gray-900">
-                      {item.percentage}% ({item.present}/{item.total})
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-6">
+            <div className="w-full overflow-x-auto">
+              {/* Graph Container */}
+              <div className="h-64 flex items-end space-x-8 min-w-max px-4 pt-10 pb-2">
+                {attendanceData.map((item) => (
+                  <div key={item.subject} className="flex flex-col items-center group relative">
+
+                    {/* Tooltip on Hover */}
+                    <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap z-10 pointer-events-none">
+                      {item.percentage}% ({item.present}/{item.total} classes)
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                    </div>
+
+                    {/* Percentage Label on Top of Bar */}
+                    <span className="text-xs font-semibold text-gray-600 mb-1">{item.percentage}%</span>
+
+                    {/* The Bar */}
                     <div
-                      className={`h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white ${item.percentage >= 75
-                        ? "bg-green-500"
-                        : item.percentage >= 50
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                      className={`w-12 rounded-t-md transition-all duration-500 ease-out relative ${item.percentage >= 75
+                          ? "bg-green-500 hover:bg-green-600"
+                          : item.percentage >= 60
+                            ? "bg-yellow-500 hover:bg-yellow-600"
+                            : "bg-red-500 hover:bg-red-600"
                         }`}
-                      style={{ width: `${item.percentage}%` }}
+                      style={{ height: `${Math.max(item.percentage, 5) * 2}px`, maxHeight: '200px' }} // Scaling height
                     >
-                      {item.percentage}%
+                    </div>
+
+                    {/* Subject Label */}
+                    <div className="mt-3 w-16 text-center">
+                      <p className="text-xs font-medium text-gray-700 truncate w-full" title={item.subject}>
+                        {item.subject.split(' ').map(word => word[0]).join('')} {/* Initials for compactness if needed, or truncate */}
+                      </p>
+                      <p className="text-[10px] text-gray-500 truncate w-full group-hover:overflow-visible group-hover:whitespace-normal group-hover:absolute group-hover:bg-white group-hover:z-20 group-hover:shadow-md group-hover:p-1 group-hover:rounded group-hover:w-32 group-hover:-ml-8 group-hover:text-center">
+                        {item.subject}
+                      </p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              {/* X-Axis Line */}
+              <div className="h-px bg-gray-300 w-full min-w-max mt-2"></div>
             </div>
           ) : (
             <p className="text-gray-500 text-center py-8">No attendance records yet.</p>
