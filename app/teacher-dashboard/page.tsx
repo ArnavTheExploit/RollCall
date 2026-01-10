@@ -278,7 +278,7 @@ export default function TeacherDashboardPage() {
 
             {uniqueSubjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {uniqueSubjects.map((subject) => {
+                {uniqueSubjects.slice(0, 6).map((subject) => {
                   const subjectClasses = teacherClasses.filter((cls) => cls.subject === subject);
                   const activeCount = subjectClasses.filter(
                     (cls) => cls.isActive && new Date() <= new Date(cls.expiresAt)
