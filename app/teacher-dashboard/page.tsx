@@ -98,12 +98,39 @@ export default function TeacherDashboardPage() {
   const handleSaveAttendance = () => {
     if (!editingRecord) return;
 
-    // In a real app, this would update the database
+    // Update the record in our mock data
     const finalReason = editReason === "Other (specify)" ? editReasonOther : editReason;
 
-    alert(
-      `Attendance updated for ${editingRecord.studentName}:\nStatus: ${editStatus}\nReason: ${finalReason || "N/A"}`
-    );
+    // Check if record already exists
+    const existingIndex = mockAttendanceRecords.findIndex(r => r.id === editingRecord.id);
+
+    if (existingIndex >= 0) {
+      // Update existing record
+      mockAttendanceRecords[existingIndex] = {
+        ...mockAttendanceRecords[existingIndex],
+        status: editStatus,
+        reason: finalReason,
+        markedBy: "teacher", // Since teacher is editing it
+        editedBy: teacher.id,
+        editedAt: new Date().toISOString()
+      };
+    } else {
+      // Create new record (for previously absent students with no record)
+      const newRecord: AttendanceRecord = {
+        ...editingRecord,
+        status: editStatus,
+        reason: finalReason,
+        markedBy: "teacher",
+        editedBy: teacher.id,
+        editedAt: new Date().toISOString()
+      };
+      mockAttendanceRecords.push(newRecord);
+    }
+
+    // Force UI refresh by cycling the selected subject or just closing modal
+    // In a real app with SWR/TanStack Query, we'd invalidate queries.
+    // Here, since we mutated the source data, a re-render should pick it up 
+    // if we trigger it. Closing the modal triggers a state update.
 
     // Close modal
     setEditingRecord(null);

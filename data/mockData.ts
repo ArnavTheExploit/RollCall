@@ -631,6 +631,21 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     teacherName: "Dr. Anjali Mehta",
     markedBy: "4",
   },
+  {
+    id: "A25",
+    classId: "C14",
+    className: "Cyber Security",
+    subject: "Cyber Security",
+    studentId: "5",
+    studentName: "Ishaan Kumar",
+    studentUSN: "1BY24CS005",
+    date: formatDate(today),
+    time: "19:00", // Class start time, marked absent
+    status: "absent",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    markedBy: "teacher", // Manually marked as absent initially
+  },
   // Records for Web Development (C13)
   {
     id: "A12",
