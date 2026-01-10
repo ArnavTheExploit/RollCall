@@ -55,64 +55,64 @@ export interface AttendanceRecord {
 export const mockStudents: Student[] = [
   {
     id: "1",
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
+    name: "Aarav Sharma",
+    email: "aarav.sharma@example.com",
     usn: "1BY24CS001",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "2",
-    name: "Bob Smith",
-    email: "bob.smith@example.com",
+    name: "Vivaan Patel",
+    email: "vivaan.patel@example.com",
     usn: "1BY24CS002",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "3",
-    name: "Charlie Brown",
-    email: "charlie.brown@example.com",
+    name: "Aditya Verma",
+    email: "aditya.verma@example.com",
     usn: "1BY24CS003",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "4",
-    name: "Diana Prince",
-    email: "diana.prince@example.com",
+    name: "Diya Gupta",
+    email: "diya.gupta@example.com",
     usn: "1BY24CS004",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "5",
-    name: "Edward Norton",
-    email: "edward.norton@example.com",
+    name: "Ishaan Kumar",
+    email: "ishaan.kumar@example.com",
     usn: "1BY24CS005",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "6",
-    name: "Fiona Green",
-    email: "fiona.green@example.com",
+    name: "Ananya Reddy",
+    email: "ananya.reddy@example.com",
     usn: "1BY24CS006",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "7",
-    name: "George Wilson",
-    email: "george.wilson@example.com",
+    name: "Rohan Singh",
+    email: "rohan.singh@example.com",
     usn: "1BY24CS007",
     course: "Computer Science",
     semester: 3,
   },
   {
     id: "8",
-    name: "Hannah Taylor",
-    email: "hannah.taylor@example.com",
+    name: "Kavya Iyer",
+    email: "kavya.iyer@example.com",
     usn: "1BY24CS008",
     course: "Computer Science",
     semester: 3,
@@ -122,20 +122,20 @@ export const mockStudents: Student[] = [
 export const mockTeachers: Teacher[] = [
   {
     id: "T1",
-    name: "Dr. Sarah Williams",
-    email: "sarah.williams@university.edu",
+    name: "Dr. Anjali Mehta",
+    email: "anjali.mehta@university.edu",
     department: "Computer Science",
   },
   {
     id: "T2",
-    name: "Prof. Michael Chen",
-    email: "michael.chen@university.edu",
+    name: "Prof. Rajesh Iyer",
+    email: "rajesh.iyer@university.edu",
     department: "Mathematics",
   },
   {
     id: "T3",
-    name: "Dr. Emily Davis",
-    email: "emily.davis@university.edu",
+    name: "Dr. Priya Sharma",
+    email: "priya.sharma@university.edu",
     department: "Physics",
   },
 ];
@@ -156,15 +156,30 @@ const createDateWithTime = (date: Date, hours: number, minutes: number) => {
 const yesterday = new Date(today);
 yesterday.setDate(yesterday.getDate() - 1);
 
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+
+const dayAfterTomorrow = new Date(today);
+dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+
+// Helper to create a date with specific time for expiration calculation
+const getEndTime = (date: Date, startTime: string, duration: number) => {
+  const [hours, minutes] = startTime.split(":").map(Number);
+  const endDate = new Date(date);
+  endDate.setHours(hours, minutes, 0, 0);
+  endDate.setMinutes(endDate.getMinutes() + duration);
+  return endDate;
+};
+
 // Create mock classes with active and expired sessions
 export const mockClasses: Class[] = [
-  // Active class today (Computer Science - Dr. Sarah Williams)
+  // Ongoing class today - Data Structures and Algorithms (morning)
   {
     id: "C1",
     name: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     course: "Computer Science",
     semester: 3,
     date: formatDate(today),
@@ -174,16 +189,16 @@ export const mockClasses: Class[] = [
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"], // All CS students
     qrCode: `CLASS-C1-${formatDate(today)}-09:00`,
     createdAt: createDateWithTime(today, 8, 50).toISOString(),
-    expiresAt: createDateWithTime(today, 10, 30).toISOString(),
+    expiresAt: getEndTime(today, "09:00", 90).toISOString(),
     isActive: true,
   },
-  // Active class today - Operating Systems
+  // Ongoing class today - Operating Systems (late morning)
   {
     id: "C2",
     name: "Operating Systems",
     subject: "Operating Systems",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     course: "Computer Science",
     semester: 3,
     date: formatDate(today),
@@ -193,27 +208,179 @@ export const mockClasses: Class[] = [
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C2-${formatDate(today)}-11:00`,
     createdAt: createDateWithTime(today, 10, 50).toISOString(),
-    expiresAt: createDateWithTime(today, 12, 30).toISOString(),
+    expiresAt: getEndTime(today, "11:00", 90).toISOString(),
     isActive: true,
   },
-  // Upcoming class today - Database Management Systems
+  // Ongoing class today - Computer Networks (afternoon)
+  {
+    id: "C6",
+    name: "Computer Networks",
+    subject: "Computer Networks",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(today),
+    startTime: "13:00",
+    endTime: "14:30",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C6-${formatDate(today)}-13:00`,
+    createdAt: createDateWithTime(today, 12, 50).toISOString(),
+    expiresAt: getEndTime(today, "13:00", 90).toISOString(),
+    isActive: true,
+  },
+  // Active class today - Cloud Computing (evening)
+  {
+    id: "C11",
+    name: "Cloud Computing",
+    subject: "Cloud Computing",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(today),
+    startTime: "18:30",
+    endTime: "20:00",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C11-${formatDate(today)}-18:30`,
+    createdAt: createDateWithTime(today, 18, 20).toISOString(),
+    expiresAt: getEndTime(today, "18:30", 90).toISOString(),
+    isActive: true,
+  },
+  // Active class today - Artificial Intelligence (evening)
+  {
+    id: "C12",
+    name: "Artificial Intelligence",
+    subject: "Artificial Intelligence",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(today),
+    startTime: "19:00",
+    endTime: "20:30",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C12-${formatDate(today)}-19:00`,
+    createdAt: createDateWithTime(today, 18, 50).toISOString(),
+    expiresAt: getEndTime(today, "19:00", 90).toISOString(),
+    isActive: true,
+  },
+  // Active class today - Web Development (evening)
+  {
+    id: "C13",
+    name: "Web Development",
+    subject: "Web Development",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(today),
+    startTime: "19:15",
+    endTime: "20:45",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C13-${formatDate(today)}-19:15`,
+    createdAt: createDateWithTime(today, 19, 5).toISOString(),
+    expiresAt: getEndTime(today, "19:15", 90).toISOString(),
+    isActive: true,
+  },
+  // Upcoming class today - Database Management Systems (afternoon)
   {
     id: "C3",
     name: "Database Management Systems",
     subject: "Database Management Systems",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     course: "Computer Science",
     semester: 3,
     date: formatDate(today),
-    startTime: "14:00",
-    endTime: "15:30",
+    startTime: "15:00",
+    endTime: "16:30",
     duration: 90,
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
-    qrCode: `CLASS-C3-${formatDate(today)}-14:00`,
-    createdAt: createDateWithTime(today, 13, 50).toISOString(),
-    expiresAt: createDateWithTime(today, 15, 30).toISOString(),
+    qrCode: `CLASS-C3-${formatDate(today)}-15:00`,
+    createdAt: createDateWithTime(today, 14, 50).toISOString(),
+    expiresAt: getEndTime(today, "15:00", 90).toISOString(),
     isActive: false, // Not started yet
+  },
+  // Upcoming class today - Software Engineering (evening)
+  {
+    id: "C7",
+    name: "Software Engineering",
+    subject: "Software Engineering",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(today),
+    startTime: "16:00",
+    endTime: "17:30",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C7-${formatDate(today)}-16:00`,
+    createdAt: createDateWithTime(today, 15, 50).toISOString(),
+    expiresAt: getEndTime(today, "16:00", 90).toISOString(),
+    isActive: false, // Not started yet
+  },
+  // Upcoming class tomorrow - Data Structures and Algorithms
+  {
+    id: "C8",
+    name: "Data Structures and Algorithms",
+    subject: "Data Structures and Algorithms",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(tomorrow),
+    startTime: "09:00",
+    endTime: "10:30",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C8-${formatDate(tomorrow)}-09:00`,
+    createdAt: createDateWithTime(tomorrow, 8, 50).toISOString(),
+    expiresAt: getEndTime(tomorrow, "09:00", 90).toISOString(),
+    isActive: false, // Upcoming
+  },
+  // Upcoming class tomorrow - Operating Systems
+  {
+    id: "C9",
+    name: "Operating Systems",
+    subject: "Operating Systems",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(tomorrow),
+    startTime: "11:00",
+    endTime: "12:30",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C9-${formatDate(tomorrow)}-11:00`,
+    createdAt: createDateWithTime(tomorrow, 10, 50).toISOString(),
+    expiresAt: getEndTime(tomorrow, "11:00", 90).toISOString(),
+    isActive: false, // Upcoming
+  },
+  // Upcoming class day after tomorrow - Machine Learning
+  {
+    id: "C10",
+    name: "Machine Learning",
+    subject: "Machine Learning",
+    teacherId: "T1",
+    teacherName: "Dr. Anjali Mehta",
+    course: "Computer Science",
+    semester: 3,
+    date: formatDate(dayAfterTomorrow),
+    startTime: "09:00",
+    endTime: "10:30",
+    duration: 90,
+    studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    qrCode: `CLASS-C10-${formatDate(dayAfterTomorrow)}-09:00`,
+    createdAt: createDateWithTime(dayAfterTomorrow, 8, 50).toISOString(),
+    expiresAt: getEndTime(dayAfterTomorrow, "09:00", 90).toISOString(),
+    isActive: false, // Upcoming
   },
   // Expired class (Yesterday - Data Structures)
   {
@@ -221,7 +388,7 @@ export const mockClasses: Class[] = [
     name: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     course: "Computer Science",
     semester: 3,
     date: formatDate(yesterday),
@@ -231,7 +398,7 @@ export const mockClasses: Class[] = [
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C4-${formatDate(yesterday)}-09:00`,
     createdAt: createDateWithTime(yesterday, 8, 50).toISOString(),
-    expiresAt: createDateWithTime(yesterday, 10, 30).toISOString(),
+    expiresAt: getEndTime(yesterday, "09:00", 90).toISOString(),
     isActive: false, // Expired
   },
   // Expired class (Yesterday - Operating Systems)
@@ -240,7 +407,7 @@ export const mockClasses: Class[] = [
     name: "Operating Systems",
     subject: "Operating Systems",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     course: "Computer Science",
     semester: 3,
     date: formatDate(yesterday),
@@ -250,7 +417,7 @@ export const mockClasses: Class[] = [
     studentIds: ["1", "2", "3", "4", "5", "6", "7", "8"],
     qrCode: `CLASS-C5-${formatDate(yesterday)}-11:00`,
     createdAt: createDateWithTime(yesterday, 10, 50).toISOString(),
-    expiresAt: createDateWithTime(yesterday, 12, 30).toISOString(),
+    expiresAt: getEndTime(yesterday, "11:00", 90).toISOString(),
     isActive: false, // Expired
   },
 ];
@@ -264,13 +431,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     studentId: "1",
-    studentName: "Alice Johnson",
+    studentName: "Aarav Sharma",
     studentUSN: "1BY24CS001",
     date: formatDate(today),
     time: "09:05",
     status: "present",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "1",
   },
   {
@@ -279,13 +446,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     studentId: "2",
-    studentName: "Bob Smith",
+    studentName: "Vivaan Patel",
     studentUSN: "1BY24CS002",
     date: formatDate(today),
     time: "09:15",
     status: "present",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "2",
   },
   {
@@ -294,13 +461,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     studentId: "5",
-    studentName: "Edward Norton",
+    studentName: "Ishaan Kumar",
     studentUSN: "1BY24CS005",
     date: formatDate(today),
     time: "09:18",
     status: "present",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "5",
   },
   // Yesterday's records for Class C4 (Data Structures)
@@ -310,13 +477,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     studentId: "1",
-    studentName: "Alice Johnson",
+    studentName: "Aarav Sharma",
     studentUSN: "1BY24CS001",
     date: formatDate(yesterday),
     time: "09:10",
     status: "present",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "1",
   },
   {
@@ -325,13 +492,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     studentId: "2",
-    studentName: "Bob Smith",
+    studentName: "Vivaan Patel",
     studentUSN: "1BY24CS002",
     date: formatDate(yesterday),
     time: "09:12",
     status: "present",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "2",
   },
   {
@@ -340,13 +507,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Data Structures and Algorithms",
     subject: "Data Structures and Algorithms",
     studentId: "8",
-    studentName: "Hannah Taylor",
+    studentName: "Kavya Iyer",
     studentUSN: "1BY24CS008",
     date: formatDate(yesterday),
     time: "09:25",
     status: "late",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "8",
   },
   // Yesterday's records for Class C5 (Operating Systems)
@@ -356,13 +523,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Operating Systems",
     subject: "Operating Systems",
     studentId: "3",
-    studentName: "Charlie Brown",
+    studentName: "Aditya Verma",
     studentUSN: "1BY24CS003",
     date: formatDate(yesterday),
     time: "11:05",
     status: "late",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "3",
   },
   {
@@ -371,13 +538,13 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     className: "Operating Systems",
     subject: "Operating Systems",
     studentId: "6",
-    studentName: "Fiona Green",
+    studentName: "Ananya Reddy",
     studentUSN: "1BY24CS006",
     date: formatDate(yesterday),
     time: "11:00",
     status: "present",
     teacherId: "T1",
-    teacherName: "Dr. Sarah Williams",
+    teacherName: "Dr. Anjali Mehta",
     markedBy: "6",
   },
 ];
@@ -385,10 +552,10 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
 // Helper function to check if a class QR code is valid
 export function isClassQRCodeValid(classData: Class): boolean {
   if (!classData.isActive) return false;
-  
+
   const now = new Date();
   const expiresAt = new Date(classData.expiresAt);
-  
+
   // Check if current time is before expiration
   return now <= expiresAt;
 }
@@ -413,14 +580,25 @@ export function getClassesForStudent(studentId: string): Class[] {
   return mockClasses.filter((cls) => cls.studentIds.includes(studentId));
 }
 
-// Helper function to get ongoing classes (active and currently happening)
+// Helper function to get ongoing classes (currently happening)
 export function getOngoingClasses(): Class[] {
   const now = new Date();
   return mockClasses.filter((cls) => {
-    if (!cls.isActive) return false;
-    const startTime = new Date(cls.date + "T" + cls.startTime);
-    const endTime = new Date(cls.expiresAt);
-    return now >= startTime && now <= endTime;
+    // Check if class is currently happening based on time
+    const classDate = new Date(cls.date + "T00:00:00");
+    const todayDate = new Date(formatDate(now) + "T00:00:00");
+
+    // Only check classes for today or future dates
+    if (classDate.getTime() < todayDate.getTime()) return false;
+
+    // For today's classes, check if current time is between start and end
+    if (formatDate(classDate) === formatDate(now)) {
+      const startTime = new Date(cls.date + "T" + cls.startTime);
+      const endTime = new Date(cls.expiresAt);
+      return now >= startTime && now <= endTime;
+    }
+
+    return false;
   });
 }
 
@@ -428,8 +606,17 @@ export function getOngoingClasses(): Class[] {
 export function getUpcomingClasses(): Class[] {
   const now = new Date();
   return mockClasses.filter((cls) => {
-    const startTime = new Date(cls.date + "T" + cls.startTime);
-    return startTime > now;
+    const classDate = new Date(cls.date + "T00:00:00");
+    const todayDate = new Date(formatDate(now) + "T00:00:00");
+
+    // For today's classes, check if start time is in the future
+    if (formatDate(classDate) === formatDate(now)) {
+      const startTime = new Date(cls.date + "T" + cls.startTime);
+      return startTime > now;
+    }
+
+    // For future dates, check if date is in the future
+    return classDate.getTime() > todayDate.getTime();
   });
 }
 
@@ -452,7 +639,7 @@ export function getAttendancePercentageBySubject(studentId: string): { subject: 
 
   // Get all unique subjects from classes
   const allSubjects = Array.from(new Set(mockClasses.map((cls) => cls.subject)));
-  
+
   // Calculate percentage for each subject
   return allSubjects.map((subject) => {
     const counts = subjectMap.get(subject) || { present: 0, total: 0 };

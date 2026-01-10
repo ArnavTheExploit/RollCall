@@ -480,15 +480,15 @@ export default function StudentDashboardPage() {
                       Ongoing
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div className="flex items-center">
-                      <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {classItem.startTime} - {classItem.endTime}
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <div className="flex items-center">
+                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {classItem.startTime} - {classItem.endTime}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">Tap to view QR code</p>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">Click to scan QR code</p>
-                  </div>
                 </div>
               ))}
             </div>
@@ -620,9 +620,9 @@ function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCo
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Scan Class QR Code</h2>
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Class QR Code</h2>
           <button
             onClick={() => {
               if (scannerRef.current) {
@@ -637,18 +637,49 @@ function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCo
             </svg>
           </button>
         </div>
-        <div className="mb-4">
+
+        {/* Class Information */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <h3 className="font-semibold text-gray-900 mb-2">{classItem.subject}</h3>
+          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+            <div>
+              <span className="font-medium">Teacher:</span> {classItem.teacherName}
+            </div>
+            <div>
+              <span className="font-medium">Time:</span> {classItem.startTime} - {classItem.endTime}
+            </div>
+            <div className="col-span-2">
+              <span className="font-medium">Date:</span> {format(parseISO(classItem.date + "T00:00:00"), "MMM dd, yyyy")}
+            </div>
+          </div>
+        </div>
+
+        {/* QR Code Display */}
+        <div className="flex flex-col items-center mb-6">
+          <p className="text-sm font-medium text-gray-700 mb-4">Attendance QR Code</p>
+          <div className="bg-white p-4 border-2 border-gray-300 rounded-lg shadow-sm">
+            <QRCodeSVG value={classItem.qrCode} size={250} className="border border-gray-200 rounded" />
+          </div>
+          <p className="text-xs text-gray-500 font-mono mt-3 break-all text-center max-w-sm">
+            {classItem.qrCode}
+          </p>
+        </div>
+
+        {/* QR Scanner */}
+        <div className="border-t border-gray-200 pt-4">
+          <p className="text-sm font-medium text-gray-700 mb-3 text-center">Or Scan QR Code</p>
           <div id="qr-reader-modal" className="mb-4"></div>
-          <p className="text-sm text-gray-600 text-center">Position QR code within the frame</p>
+          <p className="text-xs text-gray-500 text-center">
+            Position QR code within the frame to scan
+          </p>
         </div>
-        <div className="mt-4">
-          <p className="text-sm font-medium text-gray-700 mb-2">Class Information:</p>
-          <p className="text-sm text-gray-600">Subject: {classItem.subject}</p>
-          <p className="text-sm text-gray-600">Teacher: {classItem.teacherName}</p>
-          <p className="text-sm text-gray-600">Time: {classItem.startTime} - {classItem.endTime}</p>
-        </div>
-        <div className="mt-4 flex justify-center">
-          <QRCodeSVG value={classItem.qrCode} size={150} className="border border-gray-200 rounded p-2" />
+
+        {/* Status indicator */}
+        <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+          <p className="text-sm text-green-800 font-medium">QR Code is Active</p>
+          <p className="text-xs text-green-600 mt-1">
+            Valid until {format(parseISO(classItem.expiresAt), "HH:mm")}
+          </p>
         </div>
       </div>
     </div>
