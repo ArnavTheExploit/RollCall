@@ -848,8 +848,43 @@ export const mockAttendanceRecords: AttendanceRecord[] = [
     teacherName: "Dr. Anjali Mehta",
     markedBy: "8",
   },
-];
+  // --- ADDITIONAL DIVERSE DATA FOR GRAPH DEMO ---
+  // Student 1 (Aarav): High Performer (~95%)
+  { id: "MX1", classId: "C3", className: "Database Management Systems", subject: "Database Management Systems", studentId: "1", studentName: "Aarav Sharma", studentUSN: "1BY24CS001", date: formatDate(today), time: "15:05", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "1" },
+  { id: "MX2", classId: "C7", className: "Software Engineering", subject: "Software Engineering", studentId: "1", studentName: "Aarav Sharma", studentUSN: "1BY24CS001", date: formatDate(today), time: "16:02", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "1" },
 
+  // Student 2 (Vivaan): Average (~75%) with some lates
+  { id: "MX3", classId: "C3", className: "Database Management Systems", subject: "Database Management Systems", studentId: "2", studentName: "Vivaan Patel", studentUSN: "1BY24CS002", date: formatDate(today), time: "15:25", status: "late", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "2", reason: "Traffic" },
+  { id: "MX4", classId: "C5", className: "Operating Systems", subject: "Operating Systems", studentId: "2", studentName: "Vivaan Patel", studentUSN: "1BY24CS002", date: formatDate(yesterday), time: "11:00", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "2" },
+  { id: "MX5", classId: "C7", className: "Software Engineering", subject: "Software Engineering", studentId: "2", studentName: "Vivaan Patel", studentUSN: "1BY24CS002", date: formatDate(today), time: "16:10", status: "late", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "2" },
+
+  // Student 3 (Aditya): Poor Attendance (~40%)
+  { id: "MX6", classId: "C1", className: "Data Structures and Algorithms", subject: "Data Structures and Algorithms", studentId: "3", studentName: "Aditya Verma", studentUSN: "1BY24CS003", date: formatDate(today), time: "09:00", status: "absent", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "teacher", reason: "Overslept" },
+  { id: "MX7", classId: "C4", className: "Data Structures and Algorithms", subject: "Data Structures and Algorithms", studentId: "3", studentName: "Aditya Verma", studentUSN: "1BY24CS003", date: formatDate(yesterday), time: "09:00", status: "absent", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "teacher" },
+  { id: "MX8", classId: "C14", className: "Cyber Security", subject: "Cyber Security", studentId: "3", studentName: "Aditya Verma", studentUSN: "1BY24CS003", date: formatDate(today), time: "19:30", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "3" },
+
+  // Student 4 (Diya): Perfect Attendance (100%)
+  { id: "MX9", classId: "C1", className: "Data Structures and Algorithms", subject: "Data Structures and Algorithms", studentId: "4", studentName: "Diya Gupta", studentUSN: "1BY24CS004", date: formatDate(today), time: "09:01", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "4" },
+  { id: "MX10", classId: "C4", className: "Data Structures and Algorithms", subject: "Data Structures and Algorithms", studentId: "4", studentName: "Diya Gupta", studentUSN: "1BY24CS004", date: formatDate(yesterday), time: "09:05", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "4" },
+  { id: "MX11", classId: "C5", className: "Operating Systems", subject: "Operating Systems", studentId: "4", studentName: "Diya Gupta", studentUSN: "1BY24CS004", date: formatDate(yesterday), time: "11:00", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "4" },
+  { id: "MX12", classId: "C2", className: "Operating Systems", subject: "Operating Systems", studentId: "4", studentName: "Diya Gupta", studentUSN: "1BY24CS004", date: formatDate(today), time: "11:00", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "4" },
+
+  // Student 5 (Ishaan): Mixed Bag
+  { id: "MX13", classId: "C5", className: "Operating Systems", subject: "Operating Systems", studentId: "5", studentName: "Ishaan Kumar", studentUSN: "1BY24CS005", date: formatDate(yesterday), time: "11:00", status: "absent", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "teacher" },
+
+  // Student 6 (Ananya): Consistent but often late
+  { id: "MX14", classId: "C1", className: "Data Structures and Algorithms", subject: "Data Structures and Algorithms", studentId: "6", studentName: "Ananya Reddy", studentUSN: "1BY24CS006", date: formatDate(today), time: "09:20", status: "late", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "6" },
+
+  // Student 7 (Rohan): New student, fewer records but good
+  { id: "MX15", classId: "C1", className: "Data Structures and Algorithms", subject: "Data Structures and Algorithms", studentId: "7", studentName: "Rohan Singh", studentUSN: "1BY24CS007", date: formatDate(today), time: "09:05", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "7" },
+  { id: "MX16", classId: "C14", className: "Cyber Security", subject: "Cyber Security", studentId: "7", studentName: "Rohan Singh", studentUSN: "1BY24CS007", date: formatDate(today), time: "19:35", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "7" },
+
+  // Student 8 (Kavya): Great in evenings, bad in mornings
+  { id: "MX17", classId: "C14", className: "Cyber Security", subject: "Cyber Security", studentId: "8", studentName: "Kavya Iyer", studentUSN: "1BY24CS008", date: formatDate(today), time: "19:30", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "8" },
+  { id: "MX18", classId: "C15", className: "Ethical Hacking", subject: "Ethical Hacking", studentId: "8", studentName: "Kavya Iyer", studentUSN: "1BY24CS008", date: formatDate(today), time: "19:50", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "8" },
+
+  { id: "MX18", classId: "C15", className: "Ethical Hacking", subject: "Ethical Hacking", studentId: "8", studentName: "Kavya Iyer", studentUSN: "1BY24CS008", date: formatDate(today), time: "19:50", status: "present", teacherId: "T1", teacherName: "Dr. Anjali Mehta", markedBy: "8" },
+];
 // Helper function to check if a class QR code is valid
 export function isClassQRCodeValid(classData: Class): boolean {
   if (!classData.isActive) return false;
