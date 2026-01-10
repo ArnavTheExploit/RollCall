@@ -263,10 +263,10 @@ export default function StudentDashboardPage() {
                     {/* The Bar */}
                     <div
                       className={`w-12 rounded-t-md transition-all duration-500 ease-out relative ${item.percentage >= 75
-                          ? "bg-green-500 hover:bg-green-600"
-                          : item.percentage >= 60
-                            ? "bg-yellow-500 hover:bg-yellow-600"
-                            : "bg-red-500 hover:bg-red-600"
+                        ? "bg-green-500 hover:bg-green-600"
+                        : item.percentage >= 60
+                          ? "bg-yellow-500 hover:bg-yellow-600"
+                          : "bg-red-500 hover:bg-red-600"
                         }`}
                       style={{ height: `${Math.max(item.percentage, 5) * 2}px`, maxHeight: '200px' }} // Scaling height
                     >
@@ -589,119 +589,65 @@ export default function StudentDashboardPage() {
   );
 }
 
-// QR Modal Component
+// QR Modal Component - Displays QR Code for Teacher to Scan
+// QR Modal Component - Displays QR Code for Teacher to Scan
 function QRModal({ classItem, studentId, onScan, onClose }: { classItem: any; studentId: string; onScan: (qrCode: string) => void; onClose: () => void }) {
-  const [scanning, setScanning] = useState(true);
-  const scannerRef = useRef<any>(null);
-
-  // Generate personalized QR Code URL
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  const qrValues = `${origin}/attendance/mark?classId=${classItem.id}&studentId=${studentId}`;
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !scanning) return;
-
-    const startScanner = () => {
-      try {
-        const html5QrcodeScanner = new Html5QrcodeScanner(
-          "qr-reader-modal",
-          {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0,
-          },
-          false
-        );
-
-        html5QrcodeScanner.render(
-          (decodedText: string) => {
-            onScan(decodedText);
-            if (scannerRef.current) {
-              scannerRef.current.clear().catch(() => { });
-            }
-            setScanning(false);
-          },
-          () => { }
-        );
-
-        scannerRef.current = html5QrcodeScanner;
-
-      } catch (error) {
-        console.error("Error starting scanner:", error);
-      }
-    };
-
-    startScanner();
-
-    return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(() => { });
-      }
-    };
-  }, [scanning, onScan]);
+  // Generate personalized QR Code Value
+  // Format: "ATTENDANCE:ClassID:StudentID:Date:Time"
+  const timestamp = new Date().toISOString();
+  // Using a simpler string format that's easy to scan/parse or just a JSON string
+  const qrValue = JSON.stringify({
+    type: "student_attendance",
+    classId: classItem.id,
+    studentId: studentId,
+    timestamp: timestamp,
+    // Add validUntil to ensure it's related to the class session
+    validUntil: classItem.expiresAt
+  });
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Class QR Code</h2>
-          <button
-            onClick={() => {
-              if (scannerRef.current) {
-                scannerRef.current.clear().catch(() => { });
-              }
-              onClose();
-            }}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-xl max-w-sm w-full overflow-hidden">
+        {/* Header */}
+        <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Mark Attendance</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-500 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        {/* Class Information */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-gray-900 mb-2">{classItem.subject}</h3>
-          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-            <div>
-              <span className="font-medium">Teacher:</span> {classItem.teacherName}
-            </div>
-            <div>
-              <span className="font-medium">Time:</span> {classItem.startTime} - {classItem.endTime}
-            </div>
-            <div className="col-span-2">
-              <span className="font-medium">Date:</span> {format(parseISO(classItem.date + "T00:00:00"), "MMM dd, yyyy")}
-            </div>
+        {/* Content */}
+        <div className="p-8 flex flex-col items-center">
+          <div className="bg-white p-4 rounded-xl border-2 border-dashed border-gray-200 shadow-sm mb-6">
+            <QRCodeSVG
+              value={qrValue}
+              size={200}
+              level={"H"}
+              includeMargin={true}
+            />
+          </div>
+
+          <div className="text-center space-y-2">
+            <h4 className="font-medium text-gray-900">{classItem.subject}</h4>
+            <p className="text-sm text-gray-500">
+              {classItem.startTime} - {classItem.endTime}
+            </p>
+            <p className="text-xs text-blue-600 font-medium bg-blue-50 px-3 py-1 rounded-full inline-block mt-2">
+              Present this QR to your teacher
+            </p>
           </div>
         </div>
 
-        {/* QR Code Display */}
-        <div className="flex flex-col items-center mb-6">
-          <p className="text-sm font-medium text-gray-700 mb-4">Scan to Mark Attendance</p>
-          <div className="bg-white p-4 border-2 border-gray-300 rounded-lg shadow-sm">
-            <QRCodeSVG value={qrValues} size={250} className="border border-gray-200 rounded" />
-          </div>
-          <p className="text-xs text-gray-400 font-mono mt-3 text-center max-w-sm">
-            Scan with your mobile camera
-          </p>
-        </div>
-
-        {/* QR Scanner */}
-        <div className="border-t border-gray-200 pt-4">
-          <p className="text-sm font-medium text-gray-700 mb-3 text-center">Or Scan QR Code</p>
-          <div id="qr-reader-modal" className="mb-4"></div>
-          <p className="text-xs text-gray-500 text-center">
-            Position QR code within the frame to scan
-          </p>
-        </div>
-
-        {/* Status indicator */}
-        <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3 text-center">
-          <p className="text-sm text-green-800 font-medium">QR Code is Active</p>
-          <p className="text-xs text-green-600 mt-1">
-            Valid until {format(parseISO(classItem.expiresAt), "HH:mm")}
-          </p>
+        {/* Footer */}
+        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center">
+          <button
+            onClick={onClose}
+            className="w-full bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
