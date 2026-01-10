@@ -32,7 +32,7 @@ export default function StudentsPage() {
           >
             {mockStudents.map((student) => (
               <option key={student.id} value={student.id}>
-                {student.name} ({student.rollNumber}) - {student.course}
+                {student.name} ({student.usn}) - {student.course}
               </option>
             ))}
           </select>
@@ -45,7 +45,7 @@ export default function StudentsPage() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">{selectedStudent.name}</h2>
                 <p className="text-gray-600 mt-1">
-                  {selectedStudent.rollNumber} • {selectedStudent.course}
+                  {selectedStudent.usn} • {selectedStudent.course}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">{selectedStudent.email}</p>
               </div>
@@ -120,12 +120,11 @@ export default function StudentsPage() {
                 {mockStudents.map((student) => (
                   <tr
                     key={student.id}
-                    className={`hover:bg-gray-50 cursor-pointer ${
-                      selectedStudentId === student.id ? "bg-blue-50" : ""
-                    }`}
+                    className={`hover:bg-gray-50 cursor-pointer ${selectedStudentId === student.id ? "bg-blue-50" : ""
+                      }`}
                     onClick={() => setSelectedStudentId(student.id)}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.rollNumber}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.usn}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{student.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.course}</td>

@@ -63,11 +63,11 @@ export default function StudentDashboardPage() {
   const allAttendance = getAttendanceForStudent(student.id);
   const ongoingClasses = getOngoingClasses().filter((cls) => cls.studentIds.includes(student.id));
   const upcomingClasses = getUpcomingClasses().filter((cls) => cls.studentIds.includes(student.id));
-  
+
   // Get unique subjects for filter
   const uniqueSubjects = Array.from(new Set(allAttendance.map((r) => r.subject))).sort();
   const uniqueDates = Array.from(new Set(allAttendance.map((r) => r.date))).sort().reverse();
-  
+
   // Filter attendance based on selected filters
   const filteredAttendance = allAttendance.filter((record) => {
     const subjectMatch = selectedSubjectFilter === "all" || record.subject === selectedSubjectFilter;
@@ -256,13 +256,12 @@ export default function StudentDashboardPage() {
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-6">
                     <div
-                      className={`h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white ${
-                        item.percentage >= 75
+                      className={`h-6 rounded-full flex items-center justify-center text-xs font-semibold text-white ${item.percentage >= 75
                           ? "bg-green-500"
                           : item.percentage >= 50
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                        }`}
                       style={{ width: `${item.percentage}%` }}
                     >
                       {item.percentage}%
@@ -280,7 +279,7 @@ export default function StudentDashboardPage() {
         {allAttendance.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Attendance History</h2>
-            
+
             {/* Filters */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
@@ -359,13 +358,12 @@ export default function StudentDashboardPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{record.time}</td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                record.status === "present"
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${record.status === "present"
                                   ? "bg-green-100 text-green-800"
                                   : record.status === "late"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-red-100 text-red-800"
+                                }`}
                             >
                               {record.status.toUpperCase()}
                             </span>
@@ -429,13 +427,12 @@ export default function StudentDashboardPage() {
                 >
                   <div className="flex items-center space-x-4">
                     <div
-                      className={`w-3 h-3 rounded-full ${
-                        record.status === "present"
+                      className={`w-3 h-3 rounded-full ${record.status === "present"
                           ? "bg-green-500"
                           : record.status === "late"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                        }`}
                     ></div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">{record.subject}</p>
@@ -446,13 +443,12 @@ export default function StudentDashboardPage() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <span
-                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        record.status === "present"
+                      className={`px-2 py-1 text-xs font-semibold rounded-full ${record.status === "present"
                           ? "bg-green-100 text-green-800"
                           : record.status === "late"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
                     >
                       {record.status.toUpperCase()}
                     </span>
@@ -599,15 +595,15 @@ function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCo
           (decodedText: string) => {
             onScan(decodedText);
             if (scannerRef.current) {
-              scannerRef.current.clear().catch(() => {});
+              scannerRef.current.clear().catch(() => { });
             }
             setScanning(false);
           },
-          () => {}
+          () => { }
         );
 
         scannerRef.current = html5QrcodeScanner;
-        setScanner(html5QrcodeScanner);
+
       } catch (error) {
         console.error("Error starting scanner:", error);
       }
@@ -617,7 +613,7 @@ function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCo
 
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.clear().catch(() => {});
+        scannerRef.current.clear().catch(() => { });
       }
     };
   }, [scanning, onScan]);
@@ -630,7 +626,7 @@ function QRModal({ classItem, onScan, onClose }: { classItem: any; onScan: (qrCo
           <button
             onClick={() => {
               if (scannerRef.current) {
-                scannerRef.current.clear().catch(() => {});
+                scannerRef.current.clear().catch(() => { });
               }
               onClose();
             }}
@@ -733,21 +729,19 @@ function AttendanceListModal({
                       <div className="flex space-x-2">
                         <button
                           onClick={() => onMarkAttendance(student.id, "present")}
-                          className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${
-                            student.status === "present"
+                          className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${student.status === "present"
                               ? "bg-green-600 text-white"
                               : "bg-green-100 text-green-700 hover:bg-green-200"
-                          }`}
+                            }`}
                         >
                           Present
                         </button>
                         <button
                           onClick={() => onMarkAttendance(student.id, "absent")}
-                          className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${
-                            student.status === "absent"
+                          className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${student.status === "absent"
                               ? "bg-red-600 text-white"
                               : "bg-red-100 text-red-700 hover:bg-red-200"
-                          }`}
+                            }`}
                         >
                           Absent
                         </button>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Navigation from "@/components/Navigation";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { mockStudents, findClassByQRCode, isClassQRCodeValid, mockAttendanceRecords } from "@/data/mockData";
+import { mockStudents, findClassByQRCode, isClassQRCodeValid, mockAttendanceRecords, mockClasses } from "@/data/mockData";
 import { format, parseISO } from "date-fns";
 
 export default function ScanPage() {
@@ -81,7 +81,7 @@ export default function ScanPage() {
         if (student) {
           // Stop scanner
           if (scannerRef.current) {
-            scannerRef.current.clear().catch(() => {});
+            scannerRef.current.clear().catch(() => { });
             scannerRef.current = null;
           }
 
@@ -97,7 +97,7 @@ export default function ScanPage() {
       try {
         // Clear existing scanner if any
         if (scannerRef.current) {
-          scannerRef.current.clear().catch(() => {});
+          scannerRef.current.clear().catch(() => { });
         }
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
@@ -132,7 +132,7 @@ export default function ScanPage() {
 
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.clear().catch(() => {});
+        scannerRef.current.clear().catch(() => { });
         scannerRef.current = null;
       }
     };
@@ -157,7 +157,7 @@ export default function ScanPage() {
         }
 
         if (scannerRef.current) {
-          scannerRef.current.clear().catch(() => {});
+          scannerRef.current.clear().catch(() => { });
           scannerRef.current = null;
         }
 
@@ -206,7 +206,7 @@ export default function ScanPage() {
           >
             {mockStudents.map((student) => (
               <option key={student.id} value={student.id}>
-                {student.name} ({student.rollNumber}) - {student.course}
+                {student.name} ({student.usn}) - {student.course}
               </option>
             ))}
           </select>
@@ -222,7 +222,7 @@ export default function ScanPage() {
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Attendance Recorded!</h2>
               <p className="text-lg text-gray-600 mb-2">
-                <span className="font-semibold">{currentStudent?.name}</span> - {currentStudent?.rollNumber}
+                <span className="font-semibold">{currentStudent?.name}</span> - {currentStudent?.usn}
               </p>
               <p className="text-lg text-gray-900 mb-2">
                 Class: <span className="font-semibold">{classInfo.name}</span>
