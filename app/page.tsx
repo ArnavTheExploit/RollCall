@@ -44,20 +44,7 @@ export default function LandingPage() {
             A modern, efficient QR-based attendance management system for educational institutions.
             Simplify attendance tracking with technology that works for both students and teachers.
           </p>
-          <div className="flex justify-center space-x-4">
-            <Link
-              href="/login/student"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Student Portal
-            </Link>
-            <Link
-              href="/login/teacher"
-              className="px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-            >
-              Teacher Portal
-            </Link>
-          </div>
+
         </div>
 
         {/* How It Works Section */}
