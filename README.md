@@ -1,216 +1,183 @@
-# RollCall - QR Based Attendance System
+# 📋 RollCall
 
-A simple and formal frontend-only attendance management system built with Next.js, React, and Tailwind CSS. RollCall uses class-based QR codes where teachers generate QR codes for their classes, and students scan these QR codes to mark their attendance.
+> **Smart QR-Based Attendance Management System**
 
-## Features
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](https://rollcall-dashboard.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
-- 📊 **Dashboard**: Overview of students, teachers, active classes, and attendance statistics
-- 👨‍🏫 **Teacher Dashboard**: Create class sessions and generate unique QR codes for each class
-- 📱 **QR Code Scanning**: Students scan class QR codes to mark attendance (QR codes expire after class time)
-- 👥 **Student Management**: View student information and their active classes
-- 📝 **Attendance Records**: View and filter attendance records by class, date, and status
-- ⏰ **Time-Based Expiration**: QR codes automatically expire after class end time
-- 🎨 **Modern UI**: Clean, light-themed interface with responsive design
+A modern, intuitive attendance management system that leverages QR code technology for seamless class attendance tracking. Teachers generate unique QR codes for each session, and students simply scan to mark their presence.
 
-## Technology Stack
+🔗 **Live Demo**: [rollcall-dashboard.vercel.app](https://rollcall-dashboard.vercel.app)
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| 📊 **Real-time Dashboard** | Overview of students, teachers, active classes, and attendance statistics |
+| 👨‍🏫 **Teacher Portal** | Create class sessions and generate unique, time-bound QR codes |
+| 👨‍🎓 **Student Portal** | View enrolled classes, upcoming sessions, and attendance history |
+| 📱 **QR Scanning** | Fast, camera-based QR scanning with validation |
+| ⏰ **Auto-Expiration** | QR codes automatically expire after class end time |
+| 🔒 **Enrollment Validation** | Only enrolled students can mark attendance |
+| 📈 **Attendance Analytics** | Detailed records filterable by class, date, and status |
+
+---
+
+## 🛠️ Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **QR Code Generation**: qrcode.react
-- **QR Code Scanning**: html5-qrcode
-- **Date Utilities**: date-fns
-- **Runtime**: Node.js
+- **QR Generation**: qrcode.react
+- **QR Scanning**: html5-qrcode
+- **Date Handling**: date-fns
+- **Deployment**: Vercel
 
-## Getting Started
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ installed
-- npm or yarn package manager
+- Node.js 18+
+- npm or yarn
 
 ### Installation
 
-1. Clone the repository or navigate to the project directory:
 ```bash
+# Clone the repository
+git clone https://github.com/ArnavTheExploit/RollCall.git
 cd RollCall
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
 
-3. Run the development server:
-```bash
+# Start development server
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-### Building for Production
+### Production Build
 
 ```bash
 npm run build
 npm start
 ```
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```
 RollCall/
 ├── app/
-│   ├── layout.tsx             # Root layout
-│   ├── page.tsx               # Dashboard/Home page
-│   ├── globals.css            # Global styles
-│   ├── scan/                  # QR scanner page (for students)
-│   ├── teacher-dashboard/     # Teacher dashboard for managing classes
-│   ├── students/              # Students list page
-│   ├── teachers/              # Teachers list page
-│   └── attendance/            # Attendance records page
+│   ├── page.tsx                 # Main dashboard
+│   ├── teacher-dashboard/       # Teacher portal
+│   ├── student/dashboard/       # Student portal
+│   ├── scan/                    # QR scanner
+│   ├── students/                # Students list
+│   ├── teachers/                # Teachers list
+│   └── attendance/              # Attendance records
 ├── components/
-│   ├── Logo.tsx               # Logo component (SVG)
-│   └── Navigation.tsx         # Navigation bar component
+│   ├── Logo.tsx                 # Brand logo
+│   └── Navigation.tsx           # Navigation bar
 ├── data/
-│   └── mockData.ts            # Mock data for students, teachers, classes, and attendance
-└── public/                    # Static assets (if any)
+│   └── mockData.ts              # Mock data & utilities
+└── public/                      # Static assets
 ```
 
-## Mock Data
+---
 
-The application includes pre-populated mock data:
+## 👥 User Roles
 
-- **8 Students** enrolled in various courses
-- **3 Teachers** across different departments (Computer Science, Mathematics, Physics)
-- **5 Classes** with active and expired sessions
-- **Attendance Records** linked to specific classes
+### 🎓 For Teachers
 
-## Pages
+1. **Create Class Sessions**
+   - Navigate to Teacher Dashboard
+   - Set subject, date, time, and duration
+   - Select enrolled students
+   - QR code is automatically generated
 
-### Dashboard (`/`)
-- Overview statistics (total students, teachers, active classes, present/late today)
-- Active classes for today
-- Quick action buttons (Scan QR, Teacher Dashboard, View Attendance)
-- Recent attendance records grouped by class
+2. **Manage Attendance**
+   - Display QR code for students to scan
+   - View real-time attendance records
+   - Filter and export attendance data
 
-### Teacher Dashboard (`/teacher-dashboard`)
-- Create new class sessions with date, time, duration, and enrolled students
-- View all classes (active and expired)
-- Generate and display QR codes for each class
-- QR codes automatically expire after class end time
-- View enrolled students for each class
+### 📚 For Students
 
-### Scan QR Code (`/scan`)
-- Real-time QR code scanner using device camera
-- Students scan **class QR codes** (not individual student codes)
-- Validates that student is enrolled in the class
-- Checks if QR code is still active (not expired)
-- Prevents duplicate attendance marking for same class
-- Test buttons for simulating class QR code scans
-- Success confirmation after scanning
-- Auto-reset after 3 seconds for continuous scanning
+1. **Mark Attendance**
+   - Go to Scan QR page
+   - Grant camera permission
+   - Scan the class QR code
+   - Receive instant confirmation
 
-### Students (`/students`)
-- Select a student to view their information
-- View active classes that the student is enrolled in
-- Display QR codes for active classes
-- Table view of all students with their details
+2. **Track Progress**
+   - View attendance percentage by subject
+   - See upcoming and ongoing classes
+   - Review attendance history
 
-### Teachers (`/teachers`)
-- Grid view of teachers with department information
-- Table view with teacher contact details
+---
 
-### Attendance (`/attendance`)
-- Filterable attendance records by class, date, and status
-- Statistics for selected filters
-- Attendance grouped by class
-- Detailed attendance history showing which class each attendance record belongs to
+## 🔐 How It Works
 
-## Usage
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│   Teacher   │────▶│  QR Code     │────▶│   Student   │
+│   creates   │     │  generated   │     │   scans     │
+│   session   │     │  for class   │     │   QR code   │
+└─────────────┘     └──────────────┘     └─────────────┘
+                           │                     │
+                           ▼                     ▼
+                    ┌──────────────┐     ┌─────────────┐
+                    │  Time-based  │     │  Validates  │
+                    │  expiration  │     │  enrollment │
+                    └──────────────┘     │  + records  │
+                                         │  attendance │
+                                         └─────────────┘
+```
 
-### For Teachers:
+### Key Validations
+- ✅ Student must be enrolled in the class
+- ✅ QR code must be within valid time window
+- ✅ No duplicate attendance for same session
+- ✅ Automatic present/late status based on time
 
-1. **Creating Classes and Generating QR Codes**:
-   - Navigate to "Teacher Dashboard"
-   - Click "Create New Class"
-   - Fill in class details (name, date, time, duration, enrolled students)
-   - Generate QR code for the class
-   - QR code will be active from class start time until end time
-   - Each class session gets a unique QR code
+---
 
-2. **Viewing Class Attendance**:
-   - Go to "Attendance" page
-   - Filter by class, date, and/or status
-   - View which students marked attendance for each class
+## 🌐 Browser Support
 
-### For Students:
+| Browser | Support |
+|---------|---------|
+| Chrome | ✅ Full support |
+| Firefox | ✅ Full support |
+| Safari | ✅ Full support |
+| Edge | ✅ Full support |
 
-1. **Marking Attendance**:
-   - Navigate to "Scan QR Code" page
-   - Grant camera permissions when prompted
-   - Point camera at the **class QR code** displayed by the teacher
-   - System validates:
-     - You are enrolled in the class
-     - QR code is still active (not expired)
-     - You haven't already marked attendance for this class
-   - Attendance is automatically recorded upon successful scan
-   - Or click on test class QR codes for simulation
+> **Note**: Camera access requires HTTPS in production (localhost works for development)
 
-2. **Viewing Your Classes**:
-   - Visit "Students" page
-   - Select your name from the dropdown
-   - View active classes you're enrolled in
-   - See QR codes for active classes
+---
 
-3. **Viewing Attendance History**:
-   - Go to "Attendance" page
-   - Filter by class and/or date
-   - View your attendance records for different classes
+## 🔮 Future Enhancements
 
-## Browser Compatibility
+- [ ] Backend API integration for persistent storage
+- [ ] User authentication system
+- [ ] Email notifications for attendance
+- [ ] Mobile app (React Native)
+- [ ] Export to Excel/PDF
 
-- Modern browsers with camera access support (Chrome, Firefox, Safari, Edge)
-- HTTPS required for camera access in production (or localhost for development)
+---
 
-## Key Features Explained
+## 📄 License
 
-### Class-Based QR System
+This project is created for educational and demonstration purposes.
 
-- **QR codes are generated per class session**, not per student
-- Each class has a unique QR code that includes class ID, date, and time
-- QR codes automatically **expire after the class end time**
-- Students must be **enrolled in the class** to mark attendance
-- Each student can mark attendance **only once per class session**
+---
 
-### QR Code Expiration
-
-- QR codes are active from class start time until end time
-- After the class ends, the QR code expires and cannot be used
-- Teachers must generate a new QR code for each new class session
-- Expired QR codes are clearly marked in the teacher dashboard
-
-### Attendance Flow
-
-1. Teacher creates a class session → QR code is generated
-2. Teacher displays QR code to students (on screen or printed)
-3. Students scan the QR code during class time
-4. System validates: enrollment, expiration, duplicate check
-5. Attendance is recorded with timestamp and status (present/late)
-6. Attendance appears in both teacher dashboard and attendance records
-
-## Development Notes
-
-- This is a frontend-only application with mock data
-- No backend API integration is included
-- QR codes are generated client-side
-- Class data and attendance records are stored in memory (resets on page refresh)
-- In production, you would need:
-  - Backend API for persistent storage
-  - Authentication system for teachers and students
-  - Real-time QR code validation
-  - Database for classes, students, and attendance records
-
-## License
-
-This project is created for educational/demonstration purposes.
-
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/ArnavTheExploit">Arnav</a>
+</p>
