@@ -16,6 +16,8 @@ import {
   ATTENDANCE_REASONS,
   AttendanceRecord,
   Class,
+  addClassSession,
+  generateClassId,
 } from "@/data/mockData";
 import { QRCodeSVG } from "qrcode.react";
 import { format, parseISO } from "date-fns";
@@ -257,9 +259,43 @@ export default function TeacherDashboardPage() {
     setSelectedSubject(session.subject);
   };
 
-  const handleCreateSession = () => {
-    // In a real app, this would create a new class session
-    alert("Class session created successfully! It will appear in students' dashboards.");
+  const handleCreateSession = (sessionData: {
+    subject: string;
+    date: string;
+    startTime: string;
+    duration: number;
+    selectedStudents: string[];
+  }) => {
+    // Create end time from start time + duration
+    const [hours, minutes] = sessionData.startTime.split(":").map(Number);
+    const startDate = new Date(`${sessionData.date}T${sessionData.startTime}:00`);
+    const endDate = new Date(startDate.getTime() + sessionData.duration * 60 * 1000);
+    const endTime = `${String(endDate.getHours()).padStart(2, "0")}:${String(endDate.getMinutes()).padStart(2, "0")}`;
+
+    // Create the new session
+    const newSession: Class = {
+      id: generateClassId(),
+      name: sessionData.subject,
+      subject: sessionData.subject,
+      teacherId: teacher.id,
+      teacherName: teacher.name,
+      course: teacher.department,
+      semester: 3,
+      date: sessionData.date,
+      startTime: sessionData.startTime,
+      endTime: endTime,
+      duration: sessionData.duration,
+      studentIds: sessionData.selectedStudents,
+      qrCode: `CLASS-${generateClassId()}-${sessionData.date}-${sessionData.startTime}`,
+      createdAt: new Date().toISOString(),
+      expiresAt: endDate.toISOString(),
+      isActive: true,
+    };
+
+    // Save to localStorage
+    addClassSession(newSession);
+
+    alert(`Class session "${sessionData.subject}" created successfully! It will appear in students' dashboards.`);
     setShowCreateForm(false);
     setViewMode("classes");
   };
@@ -959,7 +995,13 @@ function CreateSessionForm({
   teacher: any;
   students: any[];
   onBack: () => void;
-  onSubmit: () => void;
+  onSubmit: (sessionData: {
+    subject: string;
+    date: string;
+    startTime: string;
+    duration: number;
+    selectedStudents: string[];
+  }) => void;
 }) {
   const [subject, setSubject] = useState("");
   const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -1064,7 +1106,13 @@ function CreateSessionForm({
                 alert("Please fill in all required fields and select at least one student.");
                 return;
               }
-              onSubmit();
+              onSubmit({
+                subject,
+                date,
+                startTime,
+                duration,
+                selectedStudents,
+              });
             }}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >

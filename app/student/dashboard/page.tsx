@@ -7,8 +7,8 @@ import {
   mockStudents,
   mockClasses,
   getAttendancePercentageBySubject,
-  getOngoingClasses,
-  getUpcomingClasses,
+  getOngoingClassesAll,
+  getUpcomingClassesAll,
   getClassesForStudent,
   getStudentAttendanceStats,
   getRecentAttendanceForStudent,
@@ -31,6 +31,7 @@ export default function StudentDashboardPage() {
   const [attendanceList, setAttendanceList] = useState<any[]>([]);
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>("all");
+  const [refreshKey, setRefreshKey] = useState(0); // For refreshing dynamic classes
 
   useEffect(() => {
     // Get student ID from localStorage
@@ -45,6 +46,14 @@ export default function StudentDashboardPage() {
       setStudent(foundStudent || null);
     }
   }, [router]);
+
+  // Refresh dynamic classes periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRefreshKey((prev) => prev + 1);
+    }, 5000); // Refresh every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   if (!student) {
     return (
@@ -61,8 +70,8 @@ export default function StudentDashboardPage() {
   const attendanceStats = getStudentAttendanceStats(student.id);
   const recentAttendance = getRecentAttendanceForStudent(student.id, 10);
   const allAttendance = getAttendanceForStudent(student.id);
-  const ongoingClasses = getOngoingClasses().filter((cls) => cls.studentIds.includes(student.id));
-  const upcomingClasses = getUpcomingClasses().filter((cls) => cls.studentIds.includes(student.id));
+  const ongoingClasses = getOngoingClassesAll().filter((cls) => cls.studentIds.includes(student.id));
+  const upcomingClasses = getUpcomingClassesAll().filter((cls) => cls.studentIds.includes(student.id));
 
   // Get unique subjects for filter
   const uniqueSubjects = Array.from(new Set(allAttendance.map((r) => r.subject))).sort();

@@ -1183,3 +1183,69 @@ export const ATTENDANCE_REASONS = [
 ] as const;
 
 export type AttendanceReason = typeof ATTENDANCE_REASONS[number];
+
+// ========== Dynamic Session Management (localStorage) ==========
+const DYNAMIC_CLASSES_KEY = "rollcall_dynamic_classes";
+
+// Get dynamically created classes from localStorage
+export function getDynamicClasses(): Class[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(DYNAMIC_CLASSES_KEY);
+    if (!stored) return [];
+    return JSON.parse(stored);
+  } catch (error) {
+    console.error("Error reading dynamic classes:", error);
+    return [];
+  }
+}
+
+// Add a new class session to localStorage
+export function addClassSession(session: Class): void {
+  if (typeof window === "undefined") return;
+  try {
+    const existing = getDynamicClasses();
+    existing.push(session);
+    localStorage.setItem(DYNAMIC_CLASSES_KEY, JSON.stringify(existing));
+  } catch (error) {
+    console.error("Error saving class session:", error);
+  }
+}
+
+// Get all classes (mock + dynamic)
+export function getAllClasses(): Class[] {
+  return [...mockClasses, ...getDynamicClasses()];
+}
+
+// Updated getOngoingClasses to include dynamic classes
+export function getOngoingClassesAll(): Class[] {
+  const now = new Date();
+  return getAllClasses().filter((cls) => {
+    if (!cls.isActive) return false;
+    const startTime = new Date(cls.date + "T" + cls.startTime);
+    const endTime = new Date(cls.expiresAt);
+    return now >= startTime && now <= endTime;
+  });
+}
+
+// Updated getUpcomingClasses to include dynamic classes
+export function getUpcomingClassesAll(): Class[] {
+  const now = new Date();
+  return getAllClasses().filter((cls) => {
+    const classDate = new Date(cls.date + "T00:00:00");
+    const todayDate = new Date(formatDate(now) + "T00:00:00");
+
+    if (formatDate(classDate) === formatDate(now)) {
+      const startTime = new Date(cls.date + "T" + cls.startTime);
+      return startTime > now;
+    }
+
+    return classDate.getTime() > todayDate.getTime();
+  });
+}
+
+// Generate a unique class ID
+export function generateClassId(): string {
+  return `C_DYN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
